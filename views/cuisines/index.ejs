@@ -1,0 +1,10 @@
+<h2>Search Cuisines</h2>
+<form action="/cuisines" method="GET">
+    <label>Type</label>
+    <input type="text" name="type" value="<%= searchOptions.type %> ">
+    <button type="submit">Search</button>
+</form>
+<br>
+<% cuisines.forEach(cuisine => { %>
+    <div> <%= cuisine.type %> </div>
+<% }) %>
