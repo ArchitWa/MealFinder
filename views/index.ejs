@@ -1,1 +1,6 @@
-Middle
+<h2>Recently Added</h2> 
+<div>
+    <% recipes.forEach(recipe => { %>
+        <img height="150" width="150" alt="avatar"  style="border-radius: 50%;" src="<%= recipe.foodImagePath %> ">
+    <% }) %>
+</div>

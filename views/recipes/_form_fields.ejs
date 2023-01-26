@@ -1,0 +1,44 @@
+<div>
+    <label>Name</label>
+    <input type="text" name="title" value="<%= recipe.title %>">
+</div>
+<br>
+<div>
+    <label>Cuisine</label>
+    <select name="cuisine">
+        <% cuisines.forEach(cuisine=> { %>
+            <% if (cuisine.id===recipe.cuisine) { %>
+                <option selected label="<%= cuisine.type %>" value="<%= cuisine.id %>"></option>
+            <% } else { %>
+                    <option label="<%= cuisine.type %>" value="<%= cuisine.id %>"></option>
+            <% } %>
+        <% }) %>
+    </select>
+</div>
+<br>
+<div>
+    <label>Ingredients</label>
+    <input type="text" id="addIngredient">
+    <button type="button" id="addIngBtn" class="btn-primary"> <i class="fa-solid fa-circle-plus"></i> </button>
+    <div class="listHolder">
+        <ul class="list"></ul>
+    </div>
+    <input type="hidden" name="rawIng" id="rawIngID" value="<%= recipe.ingredients + "," %>">
+
+</div>
+<br>
+<div>
+    <label>Instructions</label>
+    <textarea name="instructions"><%= recipe.instructions %></textarea>
+</div>
+<br>
+<div>
+    <label>Image</label>
+    <input type="file" name="image">
+</div>
+<br>
+<div>
+    <label>Description</label>
+    <textarea name="description"><%= recipe.description %></textarea>
+</div>
+<br>
