@@ -1,20 +1,12 @@
 const express = require("express")
-const multer = require("multer")
-const path = require("path")
-const fs = require("fs")
 
 const Cuisine = require("../models/cuisine")
 const Recipe = require("../models/recipe")
 const router = express.Router()
 
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif']
-const uploadPath = path.join('public', Recipe.foodImageBasePath)
-const upload = multer({
-    dest: uploadPath,
-    fileFilter: (req, file, callback) => {
-        callback(null, imageMimeTypes.includes(file.mimetype))
-    }
-})
+
+
 
 // All Recipes Route
 router.get('/', async (req, res) => {
@@ -46,8 +38,7 @@ router.get('/new', async (req, res) => {
 })
 
 // Create Recipe Route
-router.post('/', upload.single('image'), async (req, res) => {
-    const fileName = req.file != null ? req.file.filename : null
+router.post('/', async (req, res) => {
     let ingredients = req.body.rawIng.endsWith(",") ? req.body.rawIng.substring(0, req.body.rawIng.length - 1).split(",") : req.body.rawIng.split(",")
     if (ingredients.length === 1 && ingredients[0] == '') ingredients = null
     const recipe = new Recipe({
@@ -56,27 +47,19 @@ router.post('/', upload.single('image'), async (req, res) => {
         description: req.body.description.trim(),
         instructions: req.body.instructions.trim(),
         ingredients: ingredients,
-        foodImageName: fileName
     })
+
+    saveImage(recipe, req.body.image)
 
     try {
         const newRecipe = await recipe.save()
         // res.redirect(`cuisines/${newRecipe.id}`)
         res.redirect(`recipes`)
     } catch {
-        if (recipe.foodImageName !== null) {
-            removeFoodImage(recipe.foodImageName)
-        }
-
         renderNewPage(res, recipe, true)
     }
 })
 
-function removeFoodImage(fileName) {
-    fs.unlink(path.join(uploadPath, fileName), err => {
-        if (err) console.error(err)
-    })
-}
 
 async function renderNewPage(res, recipe, hasError = false) {
     try {
@@ -89,6 +72,16 @@ async function renderNewPage(res, recipe, hasError = false) {
         res.render('recipes/new', params)
     } catch {
         res.redirect('/recipes')
+    }
+}
+
+function saveImage(recipe, imageEncoded) {
+    if (imageEncoded == null) return
+
+    const image = JSON.parse(imageEncoded)
+    if (image != null && imageMimeTypes.includes(image.type)) {
+        recipe.foodImage = new Buffer.from(image.data, 'base64')
+        recipe.foodImageType = image.type
     }
 }
 

@@ -1,7 +1,4 @@
 const mongoose = require("mongoose")
-const path = require("path")
-
-const foodImageBasePath = 'uploads/foodImages'
 
 const recipeSchema = new mongoose.Schema({
     title: {
@@ -24,7 +21,11 @@ const recipeSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-    foodImageName: {
+    foodImage: {
+        type: Buffer,
+        required: true
+    },
+    foodImageType: {
         type: String,
         required: true
     },
@@ -36,10 +37,9 @@ const recipeSchema = new mongoose.Schema({
 })
 
 recipeSchema.virtual('foodImagePath').get(function () {
-    if (this.foodImageName != null) {
-        return path.join('/', foodImageBasePath, this.foodImageName)
+    if (this.foodImage != null && this.foodImageType != null) {
+        return `data:${this.foodImageType};charset=utf-8;base64,${this.foodImage.toString('base64')}`
     }
 })
 
 module.exports = mongoose.model("Recipe", recipeSchema)
-module.exports.foodImageBasePath = foodImageBasePath
