@@ -7,4 +7,7 @@
 <br>
 <% cuisines.forEach(cuisine => { %>
     <div> <%= cuisine.type %> </div>
+    <a href="/cuisines/<%= cuisine.id %>">View</a>
+    <a href="/cuisines/<%= cuisine.id %>/edit">Edit</a>
+    <%- include('../partials/deleteForm', { url: `/cuisines/${cuisine.id}` }) %>
 <% }) %>

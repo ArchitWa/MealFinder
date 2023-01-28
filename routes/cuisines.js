@@ -1,5 +1,6 @@
 const express = require("express")
 const Cuisine = require("../models/cuisine")
+const Recipe = require("../models/recipe")
 const router = express.Router()
 
 // All Cuisines Route
@@ -31,13 +32,71 @@ router.post('/', async (req, res) => {
     })
     try {
         const newCuisine = await cuisine.save()
-        // res.redirect(`cuisines/${newCuisine.id}`)
-        res.redirect(`cuisines`)
+        res.redirect(`cuisines/${newCuisine.id}`)
     } catch {
         res.render("cuisines/new", {
             cuisine: cuisine,
             errorMessage: "Error creating cuisine"
         })
+    }
+})
+
+// Show Cuisine Route
+router.get('/:id', async (req, res) => {
+    try {
+        const cuisine = await Cuisine.findById(req.params.id)
+        const recipes = await Recipe.find({ cuisine: cuisine.id }).limit(6).exec()
+
+        res.render('cuisines/show', {
+            cuisine: cuisine,
+            recipesInCuisine: recipes
+        })
+    } catch {
+        res.redirect('/')
+    }
+})
+
+// Edit Cuisine Route
+router.get('/:id/edit', async (req, res) => {
+    try {
+        const cuisine = await Cuisine.findById(req.params.id)
+        res.render("cuisines/edit", { cuisine: cuisine })
+    } catch {
+        res.redirect("/cuisines")
+    }
+})
+
+// Update Cuisine Route
+router.put('/:id', async (req, res) => {
+    let cuisine
+    try {
+        cuisine = await Cuisine.findById(req.params.id)
+        cuisine.type = req.body.type
+        await cuisine.save()
+        res.redirect(`/cuisines/${cuisine.id}`)
+    } catch {
+        if (cuisine == null) {
+            res.redirect('/')
+        }
+        res.render("cuisines/edit", {
+            cuisine: cuisine,
+            errorMessage: "Error updating cuisine"
+        })
+    }
+})
+
+// Delete Cuisine Route
+router.delete('/:id', async (req, res) => {
+    let cuisine
+    try {
+        cuisine = await Cuisine.findById(req.params.id)
+        await cuisine.remove()
+        res.redirect(`/cuisines`)
+    } catch {
+        if (cuisine == null) {
+            res.redirect('/')
+        }
+        res.redirect(`/cuisines/${cuisine.id}`)
     }
 })
 

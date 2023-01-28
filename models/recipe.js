@@ -33,6 +33,11 @@ const recipeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Cuisine'
+    },
+    prepTime: {
+        type: Array,
+        required: true,
+        default: ["0", "0", "0"]
     }
 })
 

@@ -15,7 +15,9 @@ router.get('/', async (req, res) => {
         query = query.regex('title', new RegExp(req.query.title, 'i'))
     }
     if (req.query.rawIng) {
-        const ingredients = req.query.rawIng.endsWith(",") ? req.query.rawIng.substring(0, req.query.rawIng.length - 1).split(",") : req.query.rawIng.split(",")
+        const ingredients = req.query.rawIng.endsWith(",")
+            ? req.query.rawIng.substring(0, req.query.rawIng.length - 1).toLowerCase().split(",")
+            : req.query.rawIng.toLowerCase().split(",")
         query = query.find({ ingredients: { $all: ingredients } })
     }
 
@@ -39,14 +41,18 @@ router.get('/new', async (req, res) => {
 
 // Create Recipe Route
 router.post('/', async (req, res) => {
-    let ingredients = req.body.rawIng.endsWith(",") ? req.body.rawIng.substring(0, req.body.rawIng.length - 1).split(",") : req.body.rawIng.split(",")
+    let ingredients = req.body.rawIng.endsWith(",")
+        ? req.body.rawIng.substring(0, req.body.rawIng.length - 1).toLowerCase().split(",")
+        : req.body.rawIng.toLowerCase().split(",")
     if (ingredients.length === 1 && ingredients[0] == '') ingredients = null
+
     const recipe = new Recipe({
         title: req.body.title,
         cuisine: req.body.cuisine,
         description: req.body.description.trim(),
         instructions: req.body.instructions.trim(),
         ingredients: ingredients,
+        prepTime: [req.body.days, req.body.hours, req.body.minutes]
     })
 
     saveImage(recipe, req.body.image)
@@ -76,7 +82,8 @@ async function renderNewPage(res, recipe, hasError = false) {
 }
 
 function saveImage(recipe, imageEncoded) {
-    if (imageEncoded == null) return
+
+    if (!imageEncoded) return
 
     const image = JSON.parse(imageEncoded)
     if (image != null && imageMimeTypes.includes(image.type)) {
