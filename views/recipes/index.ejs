@@ -13,11 +13,19 @@
         </div>
         <input type="hidden" name="rawIng" id="rawIngID" value="<%= searchOptions.rawIng + "," %>">
     </div>
+    <div>
+        <label>Prep Time</label>
+        <input type="number" min="0"  max="30" step="1" autocomplete="off" value="<%= searchOptions.days || 0 %>" name="days" id="time_days"   > d
+        <input type="number" min="-1" max="24" step="1" autocomplete="off" value="<%= searchOptions.hours || 0 %>" name="hours" id="time_hours"  > h
+        <input type="number" min="-1" max="60" step="1" autocomplete="off" value="<%= searchOptions.minutes || 0 %>" name="minutes" id="time_minutes"> m
+    </div>
     <button type="submit">Search</button>
 </form>
 <br>
 <div>
     <% recipes.forEach(recipe => { %>
-        <img height="150" width="150" alt="avatar"  style="border-radius: 50%;" src="<%= recipe.foodImagePath %> ">
+        <a href="/recipes/<%= recipe.id %> ">
+            <img height="150" width="150" alt="avatar"  style="border-radius: 50%;" src="<%= recipe.foodImagePath %> ">
+        </a>    
     <% }) %>
 </div>

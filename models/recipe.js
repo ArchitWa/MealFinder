@@ -37,7 +37,7 @@ const recipeSchema = new mongoose.Schema({
     prepTime: {
         type: Array,
         required: true,
-        default: ["0", "0", "0"]
+        default: [0, 0, 0]
     }
 })
 
