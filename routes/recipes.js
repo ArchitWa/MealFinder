@@ -48,7 +48,23 @@ router.get('/', async (req, res) => {
 
 // New Recipe Route
 router.get('/new', async (req, res) => {
-    renderNewPage(res, new Recipe())
+    try {
+
+        
+        let params = req.flash("params")[0]
+        if (!params) {
+            const cuisines = await Cuisine.find({})
+            params = {
+                cuisines: cuisines,
+                recipe: new Recipe()
+            }
+        }
+        res.render(`recipes/new`, params)
+    } catch {
+        res.redirect('/recipes')
+    }
+
+
 })
 
 // Create Recipe Route
@@ -73,7 +89,20 @@ router.post('/', async (req, res) => {
         const newRecipe = await recipe.save()
         res.redirect(`recipes/${newRecipe.id}`)
     } catch {
-        renderNewPage(res, recipe, true)
+        try {
+            const cuisines = await Cuisine.find({})
+            const params = {
+                cuisines: cuisines,
+                recipe: recipe,
+                errorMessage: `Error Creating Recipe`
+            }
+
+            req.flash('params', params)
+            res.redirect(`recipes/new`)
+        } catch (err) {
+            console.log(err);
+            res.redirect('/recipes')
+        }
     }
 })
 
@@ -104,9 +133,9 @@ router.put('/:id', async (req, res) => {
         recipe = await Recipe.findById(req.params.id)
 
         let ingredients = req.body.rawIng.endsWith(",")
-        ? req.body.rawIng.substring(0, req.body.rawIng.length - 1).toLowerCase().split(",")
-        : req.body.rawIng.toLowerCase().split(",")
-    if (ingredients.length === 1 && ingredients[0] == '') ingredients = null
+            ? req.body.rawIng.substring(0, req.body.rawIng.length - 1).toLowerCase().split(",")
+            : req.body.rawIng.toLowerCase().split(",")
+        if (ingredients.length === 1 && ingredients[0] == '') ingredients = null
 
         recipe.title = req.body.title
         recipe.cuisine = req.body.cuisine

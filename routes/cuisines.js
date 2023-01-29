@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
 // New Cuisines Route
 router.get('/new', (req, res) => {
-    res.render("cuisines/new", { cuisine: new Cuisine() })
+    res.render("cuisines/new", { cuisine: req.flash("cuisine").type === '' ? new Cuisine() : req.flash('cuisine') })
 })
 
 // Create Cuisine Route
@@ -34,10 +34,8 @@ router.post('/', async (req, res) => {
         const newCuisine = await cuisine.save()
         res.redirect(`cuisines/${newCuisine.id}`)
     } catch {
-        res.render("cuisines/new", {
-            cuisine: cuisine,
-            errorMessage: "Error creating cuisine"
-        })
+        req.flash('cuisine', cuisine)
+        res.redirect("cuisines/new")
     }
 })
 

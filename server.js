@@ -9,6 +9,9 @@ const bodyParser = require("body-parser")
 const path = require("path")
 const methodOverride = require("method-override")
 
+const flash = require("express-flash")
+const session = require("express-session")
+
 const indexRouter = require('./routes/index')
 const cuisineRouter = require('./routes/cuisines')
 const recipeRouter = require('./routes/recipes')
@@ -17,17 +20,27 @@ app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout')
 
+app.use(
+    session({
+      resave: true,
+      saveUninitialized: true,
+      secret:"yash is a super star",
+      cookie: { secure: false, maxAge: 14400000 },
+    })
+);
+app.use(flash())
+
 app.use(expressLayouts)
 app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, '/public/')))
 
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 
- app.use(function (req, res, next) {res.locals.url=req.url;next();});
+app.use(function (req, res, next) { res.locals.url = req.url; next(); });
 
 const mongoose = require("mongoose")
 mongoose.set('strictQuery', false)
-mongoose.connect(process.env.DATABASE_URL, { 
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true
 })
 const db = mongoose.connection
