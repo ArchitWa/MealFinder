@@ -23,6 +23,8 @@ app.use(express.static(path.join(__dirname, '/public/')))
 
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 
+ app.use(function (req, res, next) {res.locals.url=req.url;next();});
+
 const mongoose = require("mongoose")
 mongoose.set('strictQuery', false)
 mongoose.connect(process.env.DATABASE_URL, { 
