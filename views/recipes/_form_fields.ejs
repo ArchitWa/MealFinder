@@ -1,53 +1,89 @@
-<div>
-    <label>Name</label>
-    <input type="text" name="title" value="<%= recipe.title %>">
-</div>
-<br>
-<div>
-    <label>Cuisine</label>
-    <select name="cuisine">
-        <% cuisines.forEach(cuisine=> { %>
-            <% if (cuisine.id===recipe.cuisine) { %>
-                <option selected label="<%= cuisine.type %>" value="<%= cuisine.id %>"></option>
-            <% } else { %>
-                    <option label="<%= cuisine.type %>" value="<%= cuisine.id %>"></option>
-            <% } %>
-        <% }) %>
-    </select>
-</div>
-<br>
-<div>
-    <label>Ingredients</label>
-    <input type="text" id="addIngredient">
-    <button type="button" id="addIngBtn" class="btn-primary"> <i class="fa-solid fa-circle-plus"></i> </button>
-    <div class="listHolder">
-        <ul class="list"></ul>
+<div class="text-white">
+    <div class="flex items-center w-[36rem] pt-4 justify-center mx-auto my-1 space-x-12">
+        <!-- Recipe Title -->
+        <div class="relative w-full">
+            <div class="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
+                <i class="fa-solid fa-heading text-gray-400"></i>
+            </div>
+            <input type="text" name="title" autocomplete="off"
+                class="bg-primary-700 border-[1px] border-white text-sm rounded-lg  block w-full pl-10 p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+                placeholder="Name" value="<%= recipe.title %>">
+        </div>
+
+        <!-- Cuisine Title -->
+        <div class="relative w-full">
+            <div class="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
+                <i class="fa-solid fa-flag text-gray-400"></i>
+            </div>
+            <select name="cuisine"
+                class="border pl-10 border-white text-sm rounded-lg block w-full p-2.5 bg-primary-700 placeholder-gray-400 text-white focus:ring-paragraph focus:border-paragraph arrow">
+                <% cuisines.forEach(cuisine=> { %>
+                    <% if (cuisine.id===recipe.cuisine) { %>
+                        <option selected label="<%= cuisine.type %>" value="<%= cuisine.id %>"></option>
+                    <% } else { %>
+                        <option label="<%= cuisine.type %>" value="<%= cuisine.id %>"></option>
+                    <% } %>
+                <% }) %>
+            </select>
+        </div>
     </div>
-    <input type="hidden" name="rawIng" id="rawIngID" value="<%= recipe.ingredients + "," %>">
-</div>
-<br>
-<div>
-    <label>Prep Time</label>
-    <div id="timeForm" style="display: inline">
-        <input type="number" min="0"  max="30" step="1" autocomplete="off" value="<%= recipe.prepTime[0] %>" name="days"    id="time_days"   > d
-        <input type="number" min="-1" max="24" step="1" autocomplete="off" value="<%= recipe.prepTime[1] %>" name="hours"   id="time_hours"  > h
-        <input type="number" min="-1" max="60" step="1" autocomplete="off" value="<%= recipe.prepTime[2] %>" name="minutes" id="time_minutes"> m
+
+
+    <div class="flex items-center w-[36rem] pt-4 justify-center mx-auto space-x-11">
+        <!-- Ingredients Input -->
+        <div class="flex items-center  justify-center mx-auto"> 
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
+                    <i class="fa-solid fa-carrot text-gray-400"></i>
+                </div>
+                <input type="text" id="addIngredient" maxlength="27" autocomplete="off"
+                    class="bg-primary-700 border-[1px] border-white text-sm rounded-lg block pl-10 p-2.5  placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+                    placeholder="Ingredients">
+            </div>
+
+            <button type="button" id="addIngBtn" class="btn-primary p-2.5 w-12 ml-2 text-sm font-medium text-primary bg-paragraph rounded-lg border border-whitefocus:ring-4 focus:outline-none  hover:bg-paragraph-600">
+                <i class="fa-solid fa-circle-plus fa-lg"></i> 
+                <span class="sr-only">Add</span>
+            </button>
+        </div>
+
+        <input type="hidden" name="rawIng" id="rawIngID" value="<%= recipe.ingredients + " ," %>">
+
+        <!-- Prep Time -->
+        <div class="inline-flex">
+            <label
+                class="bg-primary-700 border-[1px] w-[5.6rem] border-white text-sm rounded-l-lg block pl-2.5 pr-2 pt-2.5 pb-2.5 text-headline outline-none focus:ring-paragraph focus:border-paragraph">
+                <i class="fa-solid fa-stopwatch pr-[0.7rem] text-gray-400"></i>
+                Prep
+            </label>
+            <input type="number" min="0" max="30" step="1" autocomplete="off"
+                class="bg-primary-700 border-[1px] border-white text-sm border-t border-b block w-auto p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+                value="<%= recipe.prepTime[0] === 0 ? "" : recipe.prepTime[0] %>" name="days" id="time_days" placeholder="d">
+            <input type="number" min="0" max="24" step="1" autocomplete="off"
+                class="bg-primary-700 border-[1px] border-white text-sm border-t border-b block w-auto p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+                value="<%= recipe.prepTime[1] === 0 ? "" : recipe.prepTime[1] %>" name="hours" id="time_hours" placeholder="h">
+            <input type="number" min="0" max="60" step="1" autocomplete="off"
+                class="bg-primary-700 border-[1px] border-white text-sm rounded-r-lg block w-auto p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+                value="<%= recipe.prepTime[2] === 0 ? "" : recipe.prepTime[2] %>" name="minutes" id="time_minutes" placeholder="m">
+        </div>  
+
     </div>
-</div>  
-<br>
-<div>
-    <label>Instructions</label>
-    <textarea name="instructions"><%= recipe.instructions %></textarea>
+
+    <div class="listHolder flex items-center pt-2 pl-[27rem] mx-auto text-gray-300 my-1">
+        <ul class="list">
+        </ul>
+    </div>
+
+    <div class="flex items-center w-[36rem] pt-2 justify-center mx-auto space-x-[5rem]">
+        <!-- Food image cover -->
+        <input type="file" name="image" class="cover filepond">
+
+        <!-- Description and Instructions Inputs -->
+        <div>
+            <!-- <p class="font-medium text-white mb-1">Description</p> -->
+            <textarea name="description" autocomplete="off" class="bg-primary-700 h-15 my-5 w-[16.6rem] border-[1px] border-white text-sm rounded-lg  block p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph" placeholder="Description"><%= recipe.description %></textarea>
+            <!-- <p class="font-medium text-white my-1">Instructions</p> -->
+            <textarea name="instructions" autocomplete="off" class="bg-primary-700 h-[8rem] border-[1px] border-white text-sm rounded-lg  block w-full  p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph" placeholder="Instructions"><%= recipe.instructions %></textarea>
+        </div>
+    </div>
 </div>
-<br>
-<div>
-    <label>Image</label>
-    
-    <input type="file" name="image" class="filepond ">
-</div>
-<br>
-<div>
-    <label>Description</label>
-    <textarea name="description"><%= recipe.description %></textarea>
-</div>
-<br>

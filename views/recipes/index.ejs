@@ -1,65 +1,81 @@
-<h2>Search Recipe</h2>
-<form action="/recipes" method="GET">
-    <div>
-        <label>Name</label>
-        <input type="text" name="title" value="<%= searchOptions.title %>">
-    </div>
-    <div>
-        <label>Ingredients</label>
-        <input type="text" id="addIngredient">
-        <button type="button" id="addIngBtn" class="btn-primary"> <i class="fa-solid fa-circle-plus"></i> </button>
-        <div class="listHolder">
-            <ul class="list"></ul>
-        </div>
-        <input type="hidden" name="rawIng" id="rawIngID" value="<%= searchOptions.rawIng + "," %>">
-    </div>
-    <div>
-        <label>Prep Time</label>
-        <input type="number" min="0"  max="30" step="1" autocomplete="off" value="<%= searchOptions.days || 0 %>" name="days" id="time_days"   > d
-        <input type="number" min="-1" max="24" step="1" autocomplete="off" value="<%= searchOptions.hours || 0 %>" name="hours" id="time_hours"  > h
-        <input type="number" min="-1" max="60" step="1" autocomplete="off" value="<%= searchOptions.minutes || 0 %>" name="minutes" id="time_minutes"> m
-    </div>
-    <button type="submit">Search</button>
-</form>
-<br>
-<div class="flex justify-center">
-    <% recipes.forEach(recipe => { %>
-        <div class="h-[200px] w-[200px] my-4 place-items-center bg-gradient-to-tl from-teal-500 to-blue-500 rounded-3xl inline-grid mx-3">
-            <div
-                class="group place-items-center relative cursor-pointer rounded-3xl items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/60">
-                <div class="h-[198px] w-[198px] place-items-center">
-                    <a href="/recipes/<%= recipe.id %>">
-                        <img height="200" width="200"
-                            class="h-full w-full  rounded-3xl object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125"
-                            src="<%= recipe.foodImagePath %>" />
-                        <div
-                            class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex translate-y-[46%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-                            <h1 class="font-dmserif text-2xl font-bold text-white">
-                                <%= recipe.title%>
-                            </h1>
-                            <h2 class="font-dmserif text-1xl font-bold text-white">
-                                Prep Time: <% if (recipe.prepTime[0] === 0) { %> 
-                                    <% if (recipe.prepTime[1] === 0) { %> 
-                                        <%= recipe.prepTime[2] %>m
-                                    <% } else { %>
-                                        <% if (recipe.prepTime[0] == 0) { %> 
-                                            <%= recipe.prepTime[1] %>h
-                                        <% } else { %> 
-                                            <%= recipe.prepTime[1] %>h <%= recipe.prepTime[2] %>m
-                                        <% } %> 
-                                    <% } %> 
-                             
-                                <% } else { %>
-                                    <%= recipe.prepTime[0] %>d <%= recipe.prepTime[1] %>h <%= recipe.prepTime[2] %>m
-                                <% } %> 
-                            </h1>
-                        </div>
-                    </a>
-                </div>
+<h2 class="header">Search Recipe</h2>
+<form action="/recipes" method="GET" class="text-white">
+
+    <div class="flex items-center w-72 pt-4 justify-center mx-auto my-1">
+        <div class="relative w-full">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fa-solid fa-heading text-gray-400"></i>
             </div>
-        </div>   
-    <% }) %>
+            <input type="text" name="title"
+                class="bg-primary-700 border-[1px] border-white text-sm rounded-lg  block w-full pl-10 p-2.5  placeholder-gray-400 outline-none focus:ring-paragraph-50 focus:border-paragraph"
+                placeholder="Name" value="<%= searchOptions.title %>">
+        </div>
+    </div>
+
+    <div class="flex items-center w-72 pt-4 justify-center mx-auto text-gray-300 my-1">
+        <label
+            class="bg-primary-700 w-28 border-[1px] border-white text-sm rounded-l-lg block pl-2.5 pr-2 pt-2.5 pb-2.5 text-headline outline-none focus:ring-paragraph-50 focus:border-paragraph-50">
+            <i class="fa-solid fa-stopwatch pr-[0.7rem] text-gray-400"></i>
+            Prep
+        </label>
+        <input type="number" min="0" max="30" step="1" autocomplete="off"
+            class="bg-primary-700 border-[1px] border-white text-sm border-t border-b block w-auto p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+            value="<%= searchOptions.days%>" name="days" id="time_days" placeholder="d">
+        <input type="number" min="0" max="24" step="1" autocomplete="off"
+            class="bg-primary-700 border-[1px] border-white text-sm border-t border-b block w-auto p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+            value="<%= searchOptions.hours %>" name="hours" id="time_hours" placeholder="h">
+        <input type="number" min="0" max="60" step="1" autocomplete="off"
+            class="bg-primary-700 border-[1px] border-white text-sm rounded-r-lg block w-auto p-2.5 placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+            value="<%= searchOptions.minutes %>" name="minutes" id="time_minutes" placeholder="m">
+    </div>
+
+    <div class="flex items-center w-72 pt-4 justify-center mx-auto my-1">
+        <div class="relative w-full">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fa-solid fa-carrot text-gray-400"></i>
+            </div>
+            <input type="text" id="addIngredient" maxlength="35" autocomplete="off"
+                class="bg-primary-700 border-[1px] border-white text-sm rounded-lg  block w-full pl-10 p-2.5  placeholder-gray-400 outline-none focus:ring-paragraph focus:border-paragraph"
+                placeholder="Ingredients">
+        </div>
+
+        <button type="button" id="addIngBtn"
+            class="btn-primary p-2.5 w-12 ml-2 text-sm font-medium text-primary bg-button rounded-lg border border-whitefocus:ring-4 focus:outline-none  hover:bg-button-600">
+            <i class="fa-solid fa-circle-plus fa-lg"></i>
+            <span class="sr-only">Add</span>
+        </button>
+
+        
+    </div>
+
+    <input class="text-primary hidden" name="rawIng" id="rawIngID" value="<%= searchOptions.rawIng || "" + " ," %>">
+
+
+    <div class="listHolder flex items-center pt-2 justify-center mx-auto text-gray-300 my-2">
+        <ul class="list">
+            <!-- <li class="w-full px-4 py-[0.5px] border-gray-600 flex justify-center align-middle">
+                <p class="py-2 px-[0.5px] pl-2 text-sm">
+                    test
+                </p>
+                <button class="text-rose-500 h-8 w-8 hover:text-white font-medium rounded-lg text-sm flex justify-block">
+                    <i class="fa fa-trash-o fa-lg w-8 h-8 py-4" aria-hidden="true"></i>
+                </button>
+            </li> -->
+        </ul>
+    </div>
+
+    <div class="flex items-center w-24 pt-2 justify-center mx-auto my-2 ">
+        <button type="submit"
+            class="btn-primary px-2 inline-flex p-2.5 w-24 ml-2 text-sm font-medium text-primary bg-button rounded-lg border border-headline hover:bg-button-600 focus:ring-4 focus:outline-none focus:ring-button-300">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            Search
+        </button>
+    </div>
+</form>
+<div class="flex justify-center">
+    <%- include('../partials/showRecipes.ejs', { recipes: recipes }) %>
 </div>

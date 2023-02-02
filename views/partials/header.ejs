@@ -1,25 +1,25 @@
 <header>
-    <nav class="py-1 border-b-[0.1px] border-opacity-40 border-b-white" style="background-color: #071329;">
+    <nav class="py-1 border-opacity-40 border-b-headline"">
         <div class="container ">
             <div class="flex justify-between">
                 <div class="logo group inline-flex items-center text-teal-500 mx-6">
                     <object data="../../assets/icon.svg" width="40" height="40"> </object>
                     <a href="/"
-                        class="text-3xl pl-1 font-bold leading-loose tracking-wide text-transparent bg-clip-text bg-gradient-to-tl from-teal-500 to-blue-200">Recipe
+                        class="text-2xl pl-1 font-bold leading-loose tracking-wide bg-primary text-headline">Recipe
                         Haven</a>
                 </div>
                 <div class="links inline-flex space-x-8 items-center -mx-[7rem]">
                     <a href="/cuisines" 
-                        class="<%= url.startsWith('/cuisines') && !url.includes("/new") ? "text-teal-400" : "text-gray-400" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-teal-300"
+                        class="<%= url.startsWith('/cuisines') && !url.includes("/new") ? "text-paragraph" : "text-headline" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-paragraph"
                         id="cuisine">Cuisines</a>
                     <a href="/cuisines/new"
-                        class="<%= url.startsWith('/cuisines/new') ? "text-teal-400" : "text-gray-400" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-teal-300"
+                        class="<%= url.startsWith('/cuisines/new') ? "text-paragraph" : "text-headline" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-paragraph"
                         id="addCuisine">Add Cuisine</a>
                     <a href="/recipes"
-                        class="<%= url.startsWith('/recipes') && !url.includes("/new") ? "text-teal-400" : "text-gray-400" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-teal-300"
+                        class="<%= url.startsWith('/recipes') && !url.includes("/new") ? "text-paragraph" : "text-headline" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-paragraph"
                         id="recipe">Recipes</a>
                     <a href="/recipes/new"
-                        class="<%= url.startsWith('/recipes/new') ? "text-teal-400" : "text-gray-400" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-teal-300"
+                        class="<%= url.startsWith('/recipes/new') ? "text-paragraph" : "text-headline" %> text-sm font-medium uppercase tracking-wider transition duration-300 ease-in-out hover:text-paragraph"
                         id="addRecipe">Add Recipe</a>
                 </div>
             </div>

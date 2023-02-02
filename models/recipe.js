@@ -38,6 +38,11 @@ const recipeSchema = new mongoose.Schema({
         type: Array,
         required: true,
         default: [0, 0, 0]
+    },
+    mins: {
+        type: Number,
+        required: true,
+        default: 0
     }
 })
 

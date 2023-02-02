@@ -1,0 +1,25 @@
+.filepond--root {
+    margin-bottom: 0;
+}
+
+.filepond--panel-root {
+    background-color:  #141829;
+    border: 1px solid;
+}
+
+.filepond--drop-label {
+    color: rgb(156 163 175);
+    font-size: inherit;
+}
+
+.cover {
+    width: 250px;
+    height: 250px;
+}
+
+.select_category{
+    outline: none;
+    height: 50px;
+    line-height: 50px;
+    padding:0px 20px;
+  }

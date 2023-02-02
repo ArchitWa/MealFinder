@@ -19,6 +19,7 @@ router.get('/', async (req, res) => {
         const ingredients = req.query.rawIng.endsWith(",")
             ? req.query.rawIng.substring(0, req.query.rawIng.length - 1).toLowerCase().split(",")
             : req.query.rawIng.toLowerCase().split(",")
+
         query = query.find({ ingredients: { $all: ingredients } })
     }
 
@@ -28,10 +29,9 @@ router.get('/', async (req, res) => {
     if (req.query.minutes) t[2] = Number(req.query.minutes)
     if (t[0] === 0 && t[1] === 0 && t[2] === 0) t = [30, 24, 60]
 
-    query = query.find({ "prepTime.0": { $lte: t[0] } })
-    query = query.find({ "prepTime.1": { $lte: t[1] } })
-    query = query.find({ "prepTime.2": { $lte: t[2] } })
-
+    // need to fix searching mech
+    let mins = t[0] * 60 * 24 + t[1] * 60 + t[2]
+    query = query.find({ "mins": { $lte: mins }})
 
     try {
         const recipes = await query.exec()
@@ -49,8 +49,6 @@ router.get('/', async (req, res) => {
 // New Recipe Route
 router.get('/new', async (req, res) => {
     try {
-
-        
         let params = req.flash("params")[0]
         if (!params) {
             const cuisines = await Cuisine.find({})
@@ -74,13 +72,19 @@ router.post('/', async (req, res) => {
         : req.body.rawIng.toLowerCase().split(",")
     if (ingredients.length === 1 && ingredients[0] == '') ingredients = null
 
+    let prepTime = [0, 0, 0]
+    if (req.body.days) prepTime[0] = Number(req.body.days)
+    if (req.body.hours) prepTime[1] = Number(req.body.hours)
+    if (req.body.minutes) prepTime[2] = Number(req.body.minutes)
+
     const recipe = new Recipe({
         title: req.body.title,
         cuisine: req.body.cuisine,
         description: req.body.description.trim(),
-        instructions: req.body.instructions.trim(),
+        instructions: req.body.instructions,
         ingredients: ingredients,
-        prepTime: [Number(req.body.days), Number(req.body.hours), Number(req.body.minutes)]
+        prepTime: prepTime,
+        mins: prepTime[0] * 24 * 60 + prepTime[1] * 60 + prepTime[2]
     })
 
     saveImage(recipe, req.body.image)
@@ -88,7 +92,8 @@ router.post('/', async (req, res) => {
     try {
         const newRecipe = await recipe.save()
         res.redirect(`recipes/${newRecipe.id}`)
-    } catch {
+    } catch (err) {
+        console.log(err)
         try {
             const cuisines = await Cuisine.find({})
             const params = {
